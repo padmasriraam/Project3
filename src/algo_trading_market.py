@@ -46,6 +46,8 @@ data_2021 = pd.read_csv(
     Path("../data/2021.csv")       
 )
 
+year = ["2017", "2018", "2019", "2020", "2021"]
+
 print(master_data)
 print(data_2017)
 print(data_2018)
@@ -79,7 +81,7 @@ st.text(" \n")
 ################################################################################
 # Streamlit Sidebar Code - Start
 
-st.sidebar.markdown("## Client Account Address and Ethernet Balance in Ether")
+st.sidebar.markdown("#### Client Account Address and Ether Balance")
 
 ##########################################
 # Step 1 - Part 4:
@@ -112,19 +114,41 @@ st.sidebar.write(ether)
 
 ##########################################
 
-# Create a select box to chose a FinTech Hire candidate
-person = st.sidebar.selectbox('Select a Person', people)
+# Create a select box to chose a developer profile
+person = st.sidebar.selectbox('Select a Developer', people)
 
-# Create a input field to record the number of hours the candidate worked
-hours = st.sidebar.number_input("Number of Months")
+backtest_person = master_data.loc[master_data['Person Name'] == person]
+st.sidebar.markdown("**Investment strategies 5 Yrs** ")
+st.sidebar.markdown(backtest_person["Investment strategies"].values[0])
+st.sidebar.markdown("**Strategy Profit:** <span style='color:Blue;font-weight:700'>"+ backtest_person["Strategy Profit"].values[0]+"</span>", unsafe_allow_html=True)       
+st.sidebar.markdown("**Annualised Return:**  <span style='color:Blue;font-weight:700'>"+ backtest_person["Annualised Return"].values[0]+"</span>"  , unsafe_allow_html=True)       
+st.sidebar.markdown("**Profit Factor:**  <span style='color:Blue;font-weight:700'>"+ str(backtest_person["Profit Factor"].values[0])+"</span>", unsafe_allow_html=True)       
+st.sidebar.markdown("**Ethereum Account Address:** "+  backtest_person["Ethereum Account Address"].values[0])
+st.sidebar.markdown("**Price:** "+ str(backtest_person["Price"].values[0]))
+st.sidebar.markdown("-------------------------------")
 
-#st.sidebar.markdown("## Candidate Name, Hourly Rate, and Ethereum Address")
+# Create a selectbox to chose a backtest period
+backtest_year = st.sidebar.selectbox("Select Backtest Period", year)
 
-# Identify the FinTech Hire candidate
-#candidate = candidate_database[person][0]
+# Identify the backtest data for the developer
+backtest_data = pd.DataFrame()
 
-# Write the Fintech Finder candidate's name to the sidebar
-#st.sidebar.write(candidate)
+if backtest_year == "2017":
+    backtest_data = data_2017.loc[data_2017['Person Name'] == person]
+elif backtest_year == "2018":
+    backtest_data = data_2018.loc[data_2018['Person Name'] == person]
+elif backtest_year == "2019":
+    backtest_data = data_2019.loc[data_2019['Person Name'] == person]
+elif backtest_year == "2020":
+    backtest_data = data_2020.loc[data_2020['Person Name'] == person]
+elif backtest_year == "2021":
+    backtest_data = data_2021.loc[data_2021['Person Name'] == person]
+
+if(len(backtest_data)> 0):
+    backtest_metric = "**Strategy Profit:** <span style='color:Blue;font-weight:700'>"+ backtest_data["Strategy Profit"].values[0]+"</span>&nbsp;&nbsp;&nbsp;&nbsp;" +"**Annualised Return:**  <span style='color:Blue;font-weight:700'>"+ backtest_data["Annualised Return"].values[0] +"</span>&nbsp;&nbsp;&nbsp;&nbsp;" +"**Profit Factor:**  <span style='color:Blue;font-weight:700'>"+ str(backtest_data["Profit Factor"].values[0])+"</span>"
+    # Write the bactest metric in sidebar
+    st.sidebar.markdown(backtest_metric, unsafe_allow_html=True) 
+   
 
 # Identify the FinTech Finder candidate's hourly rate
 #hourly_rate = candidate_database[person][3]
