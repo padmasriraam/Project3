@@ -1,6 +1,4 @@
-# Cryptocurrency Wallet
-
-#
+# Trading Algo Market to buy argorithms from sellers
 ################################################################################
 # Imports
 import streamlit as st
@@ -10,6 +8,7 @@ from web3 import Web3
 import pandas as pd
 from pathlib import Path
 w3 = Web3(Web3.HTTPProvider('http://127.0.0.1:8545'))
+
 ################################################################################
 # Step 1:
 # Import Ethereum Transaction Functions into the Fintech Finder Application
@@ -19,13 +18,15 @@ from crypto_wallet import send_transaction, generate_account, get_balance
 ################################################################################
 
 # Database of Algo Portfolios.
-# A single Ether is currently valued at $1,500
+# Master data consists of 5 year Metrics
 master_data = pd.read_csv(
     Path("../data/master_data.csv")
 )
 
+# list of seller names
 people = master_data['Person Name'].tolist()
 
+# Yearly data consists of a year Metrics of last 5 years
 data_2017 = pd.read_csv(
     Path("../data/2017.csv")       
 )
@@ -55,43 +56,53 @@ print(data_2019)
 print(data_2020)
 print(data_2021)
 
+# get master data to print in the middle page
 def get_people():
-    """Display the database of Fintech Finders candidate information."""
+    """Display the database of master data information."""
     for index, row in master_data.iterrows():
         st.image(row['Image'], width=500)
         st.markdown("**Name:** "+ row['Person Name'])
         st.markdown("**Investment strategies:** "+ row["Investment strategies"])
-        metric_text = "**Strategy Profit:** <span style='color:Blue;font-weight:700'>"+ row["Strategy Profit"]+"</span>&nbsp;&nbsp;&nbsp;&nbsp;" +"**Annualised Return:**  <span style='color:Blue;font-weight:700'>"+ row["Annualised Return"] +"</span>&nbsp;&nbsp;&nbsp;&nbsp;" +"**Profit Factor:**  <span style='color:Blue;font-weight:700'>"+ str(row["Profit Factor"])+"</span>"
+        metric_text = "**Strategy Profit:** <span style='color:Green;font-weight:700'>"+ row["Strategy Profit"]+"</span>&nbsp;&nbsp;&nbsp;&nbsp;" +"**Annualised Return:**  <span style='color:Green;font-weight:700'>"+ row["Annualised Return"] +"</span>&nbsp;&nbsp;&nbsp;&nbsp;" +"**Profit Factor:**  <span style='color:Green;font-weight:700'>"+ str(row["Profit Factor"])+"</span>"
         st.markdown(metric_text, unsafe_allow_html=True)       
         st.markdown("**Ethereum Account Address:** "+  row["Ethereum Account Address"])
-        st.markdown("**Price:** "+ str(row["Price"]))
+        st.markdown("**Price:** <span style='color:Green;font-weight:700'>"+ str(row["Price"]) +"</span> Ether", unsafe_allow_html=True)
         st.text("-------------------------------------------------------------- \n")
 
-def get_people1():
+def get_people_dataframe():
     st.write(master_data)
 
 ################################################################################
 # Streamlit Code
 
+# Making the sidebar wider as first step
+st.markdown(
+    """
+    <style>
+    [data-testid="stSidebar"][aria-expanded="true"] > div:first-child {
+        width: 600px;
+    }
+    [data-testid="stSidebar"][aria-expanded="false"] > div:first-child {
+        width: 600px;
+        margin-left: -600px;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
 # Streamlit application headings
-st.markdown("# Algo Trading Portfolio")
-st.markdown("## Buy A Trading Algorithm!")
+st.markdown("# 1Stop Investing Shop")
+st.markdown("##### Project 3 by Marc, Jigar, Padma & Roy")
 st.text(" \n")
 
 ################################################################################
 # Streamlit Sidebar Code - Start
 
-st.sidebar.markdown("#### Client Account Address and Ether Balance")
+st.sidebar.markdown("#### My Account Address and Ether Balance")
 
-##########################################
-# Step 1 - Part 4:
-# Create a variable named `account`. Set this variable equal to a call on the
-# `generate_account` function. This function will create the Fintech Finder
-# customer’s (in this case, your) HD wallet and Ethereum account.
 
-# @TODO:
 #  Call the `generate_account` function and save it as the variable `account`
-# YOUR CODE HERE
 account = generate_account()
 
 ##########################################
@@ -100,12 +111,10 @@ account = generate_account()
 st.sidebar.write(account.address)
 
 ##########################################
-# Step 1 - Part 5:
 # Define a new `st.sidebar.write` function that will display the balance of the
 # customer’s account. Inside this function, call the `get_balance` function and
 #  pass it your Ethereum `account.address`.
 
-# @TODO
 # Call `get_balance` function and pass it your account address
 # Write the returned ether balance to the sidebar
 # YOUR CODE HERE
@@ -118,13 +127,15 @@ st.sidebar.write(ether)
 person = st.sidebar.selectbox('Select a Developer', people)
 
 backtest_person = master_data.loc[master_data['Person Name'] == person]
+backtest_person_address = backtest_person["Ethereum Account Address"].values[0]
+backtest_person_rate = backtest_person["Price"].values[0]
 st.sidebar.markdown("**Investment strategies 5 Yrs** ")
 st.sidebar.markdown(backtest_person["Investment strategies"].values[0])
-st.sidebar.markdown("**Strategy Profit:** <span style='color:Blue;font-weight:700'>"+ backtest_person["Strategy Profit"].values[0]+"</span>", unsafe_allow_html=True)       
-st.sidebar.markdown("**Annualised Return:**  <span style='color:Blue;font-weight:700'>"+ backtest_person["Annualised Return"].values[0]+"</span>"  , unsafe_allow_html=True)       
-st.sidebar.markdown("**Profit Factor:**  <span style='color:Blue;font-weight:700'>"+ str(backtest_person["Profit Factor"].values[0])+"</span>", unsafe_allow_html=True)       
-st.sidebar.markdown("**Ethereum Account Address:** "+  backtest_person["Ethereum Account Address"].values[0])
-st.sidebar.markdown("**Price:** "+ str(backtest_person["Price"].values[0]))
+st.sidebar.markdown("**Strategy Profit:** <span style='color:Green;font-weight:700'>"+ backtest_person["Strategy Profit"].values[0]+"</span>", unsafe_allow_html=True)       
+st.sidebar.markdown("**Annualised Return:**  <span style='color:Green;font-weight:700'>"+ backtest_person["Annualised Return"].values[0]+"</span>"  , unsafe_allow_html=True)       
+st.sidebar.markdown("**Profit Factor:**  <span style='color:Green;font-weight:700'>"+ str(backtest_person["Profit Factor"].values[0])+"</span>", unsafe_allow_html=True)       
+st.sidebar.markdown("**Ethereum Account Address:** "+ backtest_person_address )
+st.sidebar.markdown("**Price:** <span style='color:Green;font-weight:700'>"+ str(backtest_person_rate) +"</span> Ether", unsafe_allow_html=True)
 st.sidebar.markdown("-------------------------------")
 
 # Create a selectbox to chose a backtest period
@@ -145,62 +156,19 @@ elif backtest_year == "2021":
     backtest_data = data_2021.loc[data_2021['Person Name'] == person]
 
 if(len(backtest_data)> 0):
-    backtest_metric = "**Strategy Profit:** <span style='color:Blue;font-weight:700'>"+ backtest_data["Strategy Profit"].values[0]+"</span>&nbsp;&nbsp;&nbsp;&nbsp;" +"**Annualised Return:**  <span style='color:Blue;font-weight:700'>"+ backtest_data["Annualised Return"].values[0] +"</span>&nbsp;&nbsp;&nbsp;&nbsp;" +"**Profit Factor:**  <span style='color:Blue;font-weight:700'>"+ str(backtest_data["Profit Factor"].values[0])+"</span>"
+    backtest_metric = "**Strategy Profit:** <span style='color:Green;font-weight:700'>"+ backtest_data["Strategy Profit"].values[0]+"</span>&nbsp;&nbsp;&nbsp;&nbsp;" +"**Annualised Return:**  <span style='color:Green;font-weight:700'>"+ backtest_data["Annualised Return"].values[0] +"</span>&nbsp;&nbsp;&nbsp;&nbsp;" +"**Profit Factor:**  <span style='color:Green;font-weight:700'>"+ str(backtest_data["Profit Factor"].values[0])+"</span>"
     # Write the bactest metric in sidebar
-    st.sidebar.markdown(backtest_metric, unsafe_allow_html=True) 
-   
-
-# Identify the FinTech Finder candidate's hourly rate
-#hourly_rate = candidate_database[person][3]
-
-# Write the inTech Finder candidate's hourly rate to the sidebar
-#st.sidebar.write(hourly_rate)
-
-# Identify the FinTech Finder candidate's Ethereum Address
-#candidate_address = candidate_database[person][1]
-
-# Write the inTech Finder candidate's Ethereum Address to the sidebar
-#st.sidebar.write(candidate_address)
-
-# Write the Fintech Finder candidate's name to the sidebar
-
-#st.sidebar.markdown("## Total Wage in Ether")
-
-################################################################################
-# Step 2: Sign and Execute a Payment Transaction
-
-#wage = candidate_database[person][3] * hours
-
-
-#st.sidebar.write(wage)
-
-##########################################
-# Step 2 - Part 2:
-# * Call the `send_transaction` function and pass it three parameters:
-    # - Your Ethereum `account` information. (Remember that this `account`
-    # instance was created when the `generate_account` function was called.)
-    #  From the `account` instance, the application will be able to access the
-    #  `account.address` information that is needed to populate the `from` data
-    # attribute in the raw transaction.
-    #- The `candidate_address` (which will be created and identified in the
-    # sidebar when a customer selects a candidate). This will populate the `to`
-    # data attribute in the raw transaction.
-    # - The `wage` value. This will be passed to the `toWei` function to
-    # determine the wei value of the payment in the raw transaction.
-
-# * Save the transaction hash that the `send_transaction` function returns as a
-# variable named `transaction_hash`, and have it display on the application’s
-# web interface.
-
+    st.sidebar.markdown(backtest_metric, unsafe_allow_html=True)
+    st.sidebar.image(backtest_data['Image'].values[0], width=500) 
+ 
 
 if st.sidebar.button("Send Transaction"):
 
-    # @TODO
     # Call the `send_transaction` function and pass it 3 parameters:
-    # Your `account`, the `candidate_address`, and the `wage` as parameters
+    # Your `account`, the `candidate_address`, and the `rate` as parameters
     # Save the returned transaction hash as a variable named `transaction_hash`
     # YOUR CODE HERE
-    transaction_hash = send_transaction(w3, account, candidate_address, wage)
+    transaction_hash = send_transaction(w3, account, backtest_person_address, backtest_person_rate)
 
     # Markdown for the transaction hash
     st.sidebar.markdown("#### Validated Transaction Hash")
@@ -214,7 +182,4 @@ if st.sidebar.button("Send Transaction"):
 # The function that starts the Streamlit application
 # Writes FinTech Finder candidates to the Streamlit page
 get_people()
-
-################################################################################
-# Step 3: Inspect the Transaction
 
