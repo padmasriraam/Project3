@@ -7,7 +7,7 @@ import pandas as pd
 from pathlib import Path
 w3 = Web3(Web3.HTTPProvider('http://127.0.0.1:8545'))
 
-# Import Ethereum Transaction Functions into the Fintech Finder Application
+# Import Ethereum Transaction Functions into the investment Application
 
 from crypto_wallet import send_transaction, generate_account, get_balance
 
@@ -86,7 +86,7 @@ st.sidebar.write("Ether Balance: <span style='color:Green;font-weight:700'>" + s
 st.sidebar.text("------------------------------------ \n\n")
 
 
-def main_page(st, **state):
+def home_page(st, **state):
     namespace = "main"
     variables = state[namespace] if namespace in state else {}
 
@@ -181,7 +181,7 @@ def footer(st):
 app = MultiPage()
 app.st = st
 
-app.add_app("Main Page", main_page)
+app.add_app("Home Page", home_page)
 app.add_app("Buy Page", buy_page)
 app.navbar_style = "VerticalButton"
 app.footer = footer
