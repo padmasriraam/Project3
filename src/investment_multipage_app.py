@@ -103,6 +103,7 @@ def home_page(st, **state):
         st.markdown(metric_text, unsafe_allow_html=True)       
         st.markdown("**Ethereum Account Address:** "+  row["Ethereum Account Address"])
         st.markdown("**Price:** <span style='color:Green;font-weight:700'>"+ str(row["Price"]) +"</span> Ether", unsafe_allow_html=True)
+        st.markdown("**Subscription:** "+ row["Subscription"] , unsafe_allow_html=True)
         st.text("-------------------------------------------------------------- \n")
 
 
@@ -129,6 +130,7 @@ def buy_page(st, **state):
     st.markdown("**Profit Factor:**  <span style='color:Green;font-weight:700'>"+ str(backtest_person["Profit Factor"].values[0])+"</span>", unsafe_allow_html=True)       
     st.markdown("**Ethereum Account Address:** "+ backtest_person_address )
     st.markdown("**Price:** <span style='color:Green;font-weight:700'>"+ str(backtest_person_rate) +"</span> Ether", unsafe_allow_html=True)
+    st.markdown("**Subscription:** "+ backtest_person["Subscription"].values[0] , unsafe_allow_html=True)
     st.markdown("-------------------------------")
 
     # Create a selectbox to chose a backtest period
@@ -155,7 +157,7 @@ def buy_page(st, **state):
         st.image(backtest_data['Image'].values[0], width=600) 
     
 
-    if st.button("Send Transaction"):
+    if st.button("Purchase Strategy"):
 
         # Call the `send_transaction` function and pass it 3 parameters:
         # Your `account`, the `candidate_address`, and the `rate` as parameters
