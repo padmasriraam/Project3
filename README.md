@@ -134,9 +134,11 @@ We see potential in the 1Stop Investing Shop solution and in order to extend the
 * **Customer Insights** - Ability to proivide the ratings and feedback to seller which will build over the period of time and help other investors
 * **Automated AWS Deployment** - On successful completion of transaction of investor buying the algorithm, as a next step it could deploy on the AWS as a bot with the algorithm logic so investors can start making money without needing to go technical on how to deploy and run the algorithm
 
+## Video
+![Video](images/investment_multipage_app.gif)
 
 ## Slide Deck Link
-[Slide Deck](document/Project%202-%20Presentation%20(Fintech%20Bootcamp).pdf)
+[Slide Deck](document/1Stop%20Investing%20Shop.pdf)
 
 ## Resources
 - [backtestzone.com](https://www.backtestzone.com) for back testing results
