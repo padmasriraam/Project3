@@ -136,7 +136,10 @@ We see potential in the 1Stop Investing Shop solution and in order to extend the
 
 
 ## Slide Deck Link
-[Slide Deck](document/Project%202-%20Presentation%20(Fintech%20Bootcamp).pdf)
+[Slide Deck](document/1Stop Investing Shop.pdf).pdf)
+
+## Video
+![Video](images/investment_multipage_app.gif)
 
 ## Resources
 - [backtestzone.com](https://www.backtestzone.com) for back testing results
